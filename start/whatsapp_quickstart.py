@@ -10,6 +10,7 @@ import asyncio
 # --------------------------------------------------------------
 
 load_dotenv()
+WHATSAPP_URL = os.getenv("WHATSAPP_URL")
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
 RECIPIENT_WAID = os.getenv("RECIPIENT_WAID")
 PHONE_NUMBER_ID = os.getenv("PHONE_NUMBER_ID")
@@ -24,7 +25,7 @@ APP_SECRET = os.getenv("APP_SECRET")
 
 
 def send_whatsapp_message():
-    url = f"https://graph.facebook.com/{VERSION}/{PHONE_NUMBER_ID}/messages"
+    url = f"{WHATSAPP_URL}/{VERSION}/{PHONE_NUMBER_ID}/messages"
     headers = {
         "Authorization": "Bearer " + ACCESS_TOKEN,
         "Content-Type": "application/json",
@@ -69,7 +70,7 @@ def send_message(data):
         "Authorization": f"Bearer {ACCESS_TOKEN}",
     }
 
-    url = f"https://graph.facebook.com/{VERSION}/{PHONE_NUMBER_ID}/messages"
+    url = f"{WHATSAPP_URL}/{VERSION}/{PHONE_NUMBER_ID}/messages"
 
     response = requests.post(url, data=data, headers=headers)
     if response.status_code == 200:
@@ -102,7 +103,7 @@ async def send_message(data):
     }
 
     async with aiohttp.ClientSession() as session:
-        url = "https://graph.facebook.com" + f"/{VERSION}/{PHONE_NUMBER_ID}/messages"
+        url = f"{WHATSAPP_URL}" + f"/{VERSION}/{PHONE_NUMBER_ID}/messages"
         try:
             async with session.post(url, data=data, headers=headers) as response:
                 if response.status == 200:
