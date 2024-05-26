@@ -38,6 +38,8 @@ def send_message(data):
 
     url = f"{current_app.config['WHATSAPP_URL']}/{current_app.config['VERSION']}/{current_app.config['PHONE_NUMBER_ID']}/messages"
 
+    logging.info(f"request url: {url} - headers: {headers} - data: {data}")
+
     try:
         response = requests.post(
             url, data=data, headers=headers, timeout=10
