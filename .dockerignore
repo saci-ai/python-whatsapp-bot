@@ -1,6 +1,9 @@
 # Exclude the .env file
 .env
 
+# Exclude other files
+debug/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
