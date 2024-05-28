@@ -2,10 +2,18 @@ import logging
 from flask import current_app, jsonify
 import json
 import requests
+import os
+from dotenv import load_dotenv
 
-# from app.services.openai_service import generate_response
+from app.services.openai_service import generate_response
 import re
 
+load_dotenv()
+# Get the environment variable as a string
+openai_integration_str = os.getenv("OPENAI_INTEGRATION", default="False")
+
+# Convert the string to a boolean
+OPENAI_INTEGRATION = openai_integration_str.lower() in ("true", "1", "t", "yes", "y")
 
 def log_http_response(response):
     logging.info(f"Status: {response.status_code}")
@@ -25,7 +33,7 @@ def get_text_message_input(recipient, text):
     )
 
 
-def generate_response(response):
+def generate_response_dummy(response):
     # Return text in uppercase
     return response.upper()
 
@@ -84,12 +92,12 @@ def process_whatsapp_message(body):
     message = body["entry"][0]["changes"][0]["value"]["messages"][0]
     message_body = message["text"]["body"]
 
-    # TODO: implement custom function here
-    response = generate_response(message_body)
+    if OPENAI_INTEGRATION:
+        response = generate_response(message_body, wa_id, name)
+        response = process_text_for_whatsapp(response)
+    else:
+        response = generate_response_dummy(message_body)
 
-    # OpenAI Integration
-    # response = generate_response(message_body, wa_id, name)
-    # response = process_text_for_whatsapp(response)
 
     data = get_text_message_input(current_app.config["RECIPIENT_WAID"], response)
     send_message(data)

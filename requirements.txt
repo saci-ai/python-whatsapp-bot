@@ -4,3 +4,4 @@ pydantic_core==2.18.2
 python-dotenv==1.0.1
 requests==2.32.2
 Flask==3.0.3
+openai==1.30.3
